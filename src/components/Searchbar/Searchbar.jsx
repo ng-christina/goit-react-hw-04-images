@@ -1,52 +1,52 @@
 import style from './Searchbar.module.css';
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import Notiflix from 'notiflix';
 import { FcSearch } from 'react-icons/fc';
+import React, { useState } from 'react';
+import Notiflix from 'notiflix';
 
-class Searchbar extends Component {
-  state = {
-    name: '',
+const Searchbar = ({ onSubmitHandler }) => {
+  const [name, setName] = useState('');
+
+  const handleChange = event => {
+    const { value } = event.currentTarget;
+    setName(value);
   };
-  handleChange = evt => {
-    this.setState({ name: evt.currentTarget.value.toLowerCase() });
-  };
 
-  handleSubmit = e => {
-    e.preventDefault();
+  const handleSubmit = event => {
+    event.preventDefault();
 
-    if (this.state.name.trim() === '') {
-      Notiflix.Notify.failure('Please enter search words!');
+    if (name.trim() === '') {
+      Notiflix.Notify.failure('search string is empty!');
       return;
     }
-    this.props.onSubmit(this.state);
-    this.setState({ name: '' });
+
+    onSubmitHandler({ name });
+
+    reset();
   };
-  reset() {
-    this.setState({ name: '' });
-  }
-  render() {
-    return (
-      <header className={style.searchbar}>
-        <form className={style.searchForm} onSubmit={this.handleSubmit}>
-          <input
-            className={style.input}
-            type="text"
-            autoComplete="off"
-            autoFocus
-            placeholder="Search images and photos"
-            onChange={this.handleChange}
-          />
-          <button type="submit" className={style.searchFormButton}>
-            <span className={style.buttonLabel}>Search</span>
-            <FcSearch className={style.fc} />
-          </button>
-        </form>
-      </header>
-    );
-  }
-}
-Searchbar.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
+
+  const reset = () => {
+    setName('');
+  };
+
+  return (
+    <header className={style.searchbar}>
+      <form className={style.searchForm} onSubmit={handleSubmit}>
+        <input
+          className={style.input}
+          type="text"
+          autoComplete="off"
+          autoFocus
+          placeholder="Search images and photos"
+          onChange={handleChange}
+          value={name}
+        />
+        <button type="submit" className={style.searchFormButton}>
+          <span className={style.buttonLabel}>Search</span>
+          <FcSearch className={style.fc} />
+        </button>
+      </form>
+    </header>
+  );
 };
+
 export default Searchbar;

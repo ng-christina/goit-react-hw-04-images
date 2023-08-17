@@ -75,7 +75,7 @@ const App = () => {
 
   return (
     <div>
-      <Searchbar onSubmit={handleSubmit} />
+      <Searchbar onSubmitHandler={handleSubmit} />
       {hits.length !== 0 && (
         <ImageGalleryList>
           <ImageGalleryItem images={hits} onImage={handleImageClick} />
